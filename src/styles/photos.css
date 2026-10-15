@@ -91,3 +91,29 @@
 .ftr .logo img { height: 84px; }
 @media (max-width: 1180px) { .nav a { padding: 8px 9px; font-size: .94rem; } .hdr__in { gap: 22px; } }
 @media (max-width: 1020px) { .logo img { height: 48px; } }
+
+/* ============ PERFORMANCE ============ */
+/* backdrop blurs over a moving canvas force a re-blur every frame: use solid fills instead */
+.hdr { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(6,8,24,.94); }
+.next { -webkit-backdrop-filter: none; backdrop-filter: none; background: linear-gradient(160deg, rgba(30,24,86,.95), rgba(10,10,38,.97)); }
+.rail { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(13,16,48,.94); }
+.mnav { -webkit-backdrop-filter: none; backdrop-filter: none; }
+
+/* the page-long glow no longer animates (animating a 15,000px layer repainted constantly) */
+.ambient { animation: none; }
+
+/* fewer, slower orbs in the hero */
+.hero .blobs .b3, .hero .blobs .b4 { display: none; }
+.hero .blobs i { animation-duration: 45s; }
+
+/* glow images: no filter, only a compositor-friendly transform */
+.glow i { filter: none; }
+.ecard, .ncard, .citycard, .mosaic__f, .prog, .cta, .icard { will-change: auto; }
+
+/* headline light-sweep: colour only (text-shadow repainted every frame) */
+@keyframes glint {
+  0%   { color: #fff; transform: none; }
+  7%   { color: var(--teal); transform: translateY(-7%); }
+  15%  { color: #fff; transform: none; }
+  100% { color: #fff; transform: none; }
+}
