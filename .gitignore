@@ -1,0 +1,8 @@
+node_modules
+dist
+
+# local design references (third-party screenshots + mockup), not for the public repo
+reference/
+Desktop 1440.png
+.env
+.env.*
