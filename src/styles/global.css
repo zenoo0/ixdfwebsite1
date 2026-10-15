@@ -364,7 +364,6 @@ ul { padding: 0; list-style: none; }
 
 /* ============ SUB PAGES ============ */
 .phero { position: relative; overflow: visible; padding: clamp(64px, 9vw, 120px) 0 clamp(56px, 7vw, 90px); background: radial-gradient(90% 120% at 85% 0%, #2a1a85 0%, #0a0a2c 55%, var(--bg) 100%); isolation: isolate; }
-.phero::before { content: ''; position: absolute; right: -8%; top: -40%; width: 60vw; max-width: 760px; aspect-ratio: 1; z-index: -1; border-radius: 50%; background: radial-gradient(circle, #04051a 0 38%, transparent 39%), repeating-conic-gradient(from 0deg, rgba(139,125,255,.5) 0 .6deg, transparent .6deg 6deg); mask-image: radial-gradient(circle, #000 30%, transparent 70%); -webkit-mask-image: radial-gradient(circle, #000 30%, transparent 70%); opacity: .7; }
 .crumbs { display: flex; flex-wrap: wrap; gap: 8px; font-size: .88rem; color: var(--muted); margin-bottom: 22px; }
 .crumbs a:hover { color: var(--teal); }
 .phero h1 { font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: clamp(2.8rem, 8vw, 7rem); line-height: .96; max-width: 14em; }
@@ -516,9 +515,6 @@ ul { padding: 0; list-style: none; }
 .strip__t > span > span:nth-child(even) { color: #fff; -webkit-text-stroke: 0; }
 .strip em { font-style: normal; font-size: .45em; color: var(--amber); -webkit-text-stroke: 0; }
 
-/* phero ring slowly turns */
-.phero::before { animation: spin 90s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
 
 /* equal-height cards in every grid */
 .egrid > .rv, .ngrid > .rv, .tgrid > .rv, .cgrid > .rv, .ugrid > .rv, .campus > .rv { display: flex; flex-direction: column; }

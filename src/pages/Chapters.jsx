@@ -21,16 +21,22 @@ export default function Chapters() {
         <div className="wrap">
           <div className="cgrid">
             {DATA.chapters.map((c, i) => (
-              <Reveal key={c.slug} delay={(i % 3) * 0.07}>
+              <Reveal key={c.slug} delay={(i % 3) * 0.08}>
                 <Link to={`/chapters/${c.slug}`} className="ccard">
-                  <h3>{c.name}</h3>
-                  <div className="f">{c.focus}</div>
-                  <p>{c.blurb}</p>
-                  <div className="ccard__s">
-                    <div><b>{c.members.toLocaleString('en-US')}</b><small>Members</small></div>
-                    <div><b>{c.unis}</b><small>Universities</small></div>
+                  <img className="ccard__img" src={c.photo} alt={`${c.name} chapter`} loading="lazy" />
+                  <span className="ccard__no" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="ccard__go" aria-hidden="true"><Arrow /></span>
+                  <div className="ccard__b">
+                    <span className="ccard__tag">{c.members.toLocaleString('en-US')} members</span>
+                    <h3>{c.name}</h3>
+                    <div className="f">{c.focus}</div>
+                    <div className="ccard__more">
+                      <div>
+                        <p>{c.blurb}</p>
+                        <span className="ccard__u">{c.unis} partner universities</span>
+                      </div>
+                    </div>
                   </div>
-                  <span className="link-arrow" style={{ marginTop: 18 }}>Open chapter <Arrow /></span>
                 </Link>
               </Reveal>
             ))}
