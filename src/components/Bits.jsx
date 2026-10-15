@@ -64,8 +64,16 @@ export const SectionHeading = ({ title, tag, tagTone = 'teal', sub, left = false
   const [ref, on] = useInView({ threshold: 0.3 });
   return (
     <div ref={ref} className={`sh ${left ? 'sh--left' : ''} ${on ? 'in' : ''}`}>
-      <h2><SplitText text={title} active={on} /></h2>
-      <span className={`tag tag--${tagTone}`}>{tag}</span>
+      <Parallax speed={0.05}>
+        <h2><SplitText text={title} active={on} /></h2>
+      </Parallax>
+      <Parallax speed={-0.05}>
+        <div className="sh__row">
+          {!left && <i className="sh__ln" aria-hidden="true" />}
+          <span className={`tag tag--${tagTone}`}>{tag}</span>
+          {!left && <i className="sh__ln" aria-hidden="true" />}
+        </div>
+      </Parallax>
       {sub && <p className="muted">{sub}</p>}
     </div>
   );

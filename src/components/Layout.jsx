@@ -92,11 +92,11 @@ function Header() {
 
   // scroll state: shrink into a pill, hide while scrolling down, show when scrolling up, draw progress
   useEffect(() => {
-    let last = window.scrollY, raf = 0;
+    let last = window.scrollY, raf = 0, max = 0;
+    const measure = () => { max = document.documentElement.scrollHeight - window.innerHeight; };
     const update = () => {
       raf = 0;
       const y = window.scrollY;
-      const max = document.documentElement.scrollHeight - window.innerHeight;
       if (bar.current) bar.current.style.transform = `scaleX(${max > 0 ? Math.min(y / max, 1) : 0})`;
       setScrolled(y > 40);
       if (openRef.current || y < 160) setHidden(false);
@@ -105,13 +105,18 @@ function Header() {
       last = y;
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    const onResize = () => { measure(); onScroll(); };
+    measure();
     update();
+    const ro = new ResizeObserver(onResize); // page height changes as images/sections load
+    ro.observe(document.body);
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
+    window.addEventListener('resize', onResize);
     return () => {
       cancelAnimationFrame(raf);
+      ro.disconnect();
       window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
+      window.removeEventListener('resize', onResize);
     };
   }, []);
 
