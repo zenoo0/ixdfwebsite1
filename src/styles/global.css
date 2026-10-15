@@ -157,7 +157,7 @@ ul { padding: 0; list-style: none; }
 
 /* stats */
 .stats { position: relative; padding: 90px 0 100px; overflow: hidden; background: linear-gradient(180deg, var(--bg) 0%, #0c1030 100%); }
-.stats__ghost { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font-family: var(--display); text-transform: uppercase; font-size: clamp(7rem, 24vw, 24rem); line-height: 1; white-space: nowrap; color: transparent; -webkit-text-stroke: 2px rgba(255,255,255,.07); pointer-events: none; user-select: none; }
+.stats__ghost { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font-family: var(--display); text-transform: uppercase; font-size: 17.5vw; line-height: 1; white-space: nowrap; color: transparent; -webkit-text-stroke: 2px rgba(255,255,255,.07); pointer-events: none; user-select: none; }
 .stats__g { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; text-align: center; }
 .stat b { display: block; font-family: var(--body); font-weight: 500; font-size: clamp(2.4rem, 5vw, 4rem); line-height: 1.1; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
 .stat b i { font-style: normal; color: var(--amber); }

@@ -80,10 +80,16 @@ const Stats = () => (
   </section>
 );
 
+const ICON = {
+  learn: <path d="M3 9l9-5 9 5-9 5-9-5zM7 11.5V16c0 1.4 2.2 3 5 3s5-1.6 5-3v-4.5M21 9v6" />,
+  connect: <><circle cx="6" cy="7" r="2.5" /><circle cx="18" cy="7" r="2.5" /><circle cx="12" cy="18" r="2.5" /><path d="M8 8.5l3 7M16 8.5l-3 7M8.5 7h7" /></>,
+  impact: <path d="M12 3l2.2 5.6L20 9.3l-4.4 3.8 1.4 5.9L12 15.8 7 19l1.4-5.9L4 9.3l5.8-.7L12 3z" />
+};
+
 const PILLARS = [
-  ['Learn', 'Practical, project-based workshops and webinars taught by working practitioners, in every city, for every level.'],
-  ['Connect', 'Ten chapters and 60+ campuses linked into one network where designers, researchers and engineers meet and collaborate.'],
-  ['Impact', 'Research, sprints and partnerships that put local users first: Urdu and regional languages, low bandwidth, mobile-first, inclusive.']
+  ['learn', 'Learn', 'Practical, project-based workshops and webinars taught by working practitioners, in every city, for every level.'],
+  ['connect', 'Connect', 'Ten chapters and 60+ campuses linked into one network where designers, researchers and engineers meet and collaborate.'],
+  ['impact', 'Impact', 'Research, sprints and partnerships that put local users first: Urdu and regional languages, low bandwidth, mobile-first, inclusive.']
 ];
 
 const MOSAIC = [
@@ -95,26 +101,36 @@ const MOSAIC = [
 const Mission = () => (
   <section className="sec" id="mission">
     <div className="wrap">
-      <div className="mission">
-        <Reveal>
-          <div className="eyebrow">Our mission</div>
-          <p className="mission__big" style={{ marginTop: 16 }}>
-            To make Pakistan a place where <em>great design</em> is built, taught and valued, in every city, in every language.
-          </p>
+      <div className="mi">
+        <div className="mi__lead">
+          <Reveal as="div" className="eyebrow mi__eye">Our mission</Reveal>
+          <h2 className="mi__big">
+            <SplitText text="To make Pakistan a place where" step={0.014} />
+            <span className="hl"><SplitText text="great design" delay={0.25} step={0.03} /></span>
+            <SplitText text="is built, taught and valued, in every city, in every language." delay={0.5} step={0.012} />
+          </h2>
+        </div>
+        <Reveal className="mi__side" delay={0.15}>
+          <p className="lead">We are volunteers, designers and researchers building the national home for design in Pakistan: open, local-first and welcoming to every level.</p>
           <ul className="principles">
             {['Local-first', 'Open knowledge', 'Inclusive by default', 'Practitioner-led'].map((p) => <li key={p}>{p}</li>)}
           </ul>
-          <Link to="/chapters" className="btn btn--amber btn--lg" style={{ marginTop: 34 }}>See the national network <Arrow /></Link>
+          <Link to="/chapters" className="btn btn--amber btn--lg">See the national network <Arrow /></Link>
         </Reveal>
-        <div className="pillars">
-          {PILLARS.map(([t, d], i) => (
-            <Reveal key={t} className="pillar" delay={i * 0.1}>
-              <span className="pillar__n">{i + 1}</span>
-              <div><h3>{t}</h3><p>{d}</p></div>
-            </Reveal>
-          ))}
-        </div>
       </div>
+
+      <div className="pcs">
+        {PILLARS.map(([k, t, d], i) => (
+          <Reveal key={t} className="pc" delay={i * 0.12}>
+            <span className="pc__n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <span className="pc__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{ICON[k]}</svg></span>
+            <h3>{t}</h3>
+            <p>{d}</p>
+            <span className="pc__bar" aria-hidden="true" />
+          </Reveal>
+        ))}
+      </div>
+
       <div className="mosaic">
         {MOSAIC.map(([src, alt, cap, cls], i) => (
           <Reveal key={cls} className={`mosaic__i ${cls}`} delay={i * 0.12}>
