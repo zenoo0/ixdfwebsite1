@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { SOCIAL, SocialIcon } from './Icons.jsx';
 
@@ -31,9 +31,58 @@ const Logo = () => (
   </Link>
 );
 
+/** Primary nav with a pill that glides to the hovered / active link. */
+function Nav() {
+  const ref = useRef(null);
+  const { pathname } = useLocation();
+  const [ind, setInd] = useState({ x: 0, w: 0, o: 0 });
+
+  const moveTo = (el) => {
+    const nav = ref.current;
+    if (!nav || !el) {
+      setInd((i) => ({ ...i, o: 0 }));
+      return;
+    }
+    const n = nav.getBoundingClientRect();
+    const r = el.getBoundingClientRect();
+    setInd({ x: r.left - n.left, w: r.width, o: 1 });
+  };
+  const toActive = () => moveTo(ref.current?.querySelector('a.active'));
+
+  useEffect(() => {
+    const t = setTimeout(toActive, 60);
+    window.addEventListener('resize', toActive);
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener('resize', toActive);
+    };
+  }, [pathname]);
+
+  const hover = { onMouseEnter: (e) => moveTo(e.currentTarget), onFocus: (e) => moveTo(e.currentTarget) };
+
+  return (
+    <nav className="nav" aria-label="Primary" ref={ref} onMouseLeave={toActive} onBlur={toActive}>
+      <span className="nav__ind" aria-hidden="true" style={{ '--x': `${ind.x}px`, '--w': `${ind.w}px`, '--o': ind.o }} />
+      {NAV.map(([label, to]) =>
+        to.includes('#') ? (
+          <Link key={label} to={to} {...hover}>{label}</Link>
+        ) : (
+          <NavLink key={label} to={to} className={({ isActive }) => (isActive ? 'active' : undefined)} {...hover}>{label}</NavLink>
+        )
+      )}
+    </nav>
+  );
+}
+
 function Header() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const bar = useRef(null);
+  const openRef = useRef(false);
   const { pathname } = useLocation();
+
+  openRef.current = open;
 
   useEffect(() => setOpen(false), [pathname]);
   useEffect(() => {
@@ -41,21 +90,40 @@ function Header() {
     return () => { document.body.style.overflow = ''; };
   }, [open]);
 
-  const link = ([label, to]) =>
-    to.includes('#') ? (
-      <Link key={label} to={to}>{label}</Link>
-    ) : (
-      <NavLink key={label} to={to} className={({ isActive }) => (isActive ? 'active' : undefined)}>{label}</NavLink>
-    );
+  // scroll state: shrink into a pill, hide while scrolling down, show when scrolling up, draw progress
+  useEffect(() => {
+    let last = window.scrollY, raf = 0;
+    const update = () => {
+      raf = 0;
+      const y = window.scrollY;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if (bar.current) bar.current.style.transform = `scaleX(${max > 0 ? Math.min(y / max, 1) : 0})`;
+      setScrolled(y > 40);
+      if (openRef.current || y < 160) setHidden(false);
+      else if (y - last > 6) setHidden(true);
+      else if (last - y > 6) setHidden(false);
+      last = y;
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, []);
 
   return (
     <>
-      <header className="hdr">
+      <div className="progress" aria-hidden="true"><i ref={bar} /></div>
+      <header className={`hdr ${scrolled ? 'is-scrolled' : ''} ${hidden ? 'is-hidden' : ''}`}>
         <div className="wrap hdr__in">
           <Logo />
-          <nav className="nav" aria-label="Primary">{NAV.map(link)}</nav>
+          <Nav />
           <div className="hdr__cta">
-            <Link to="/join#join" className="btn btn--amber btn--sm">Join Community</Link>
+            <Link to="/join#join" className="btn btn--amber btn--sm hdr__pulse">Join Community</Link>
             <Link to="/join#collaborate" className="btn btn--outline btn--sm">Collaborate</Link>
             <Link to="/join#sponsor" className="btn btn--violet btn--sm">Sponsor</Link>
           </div>
@@ -65,11 +133,11 @@ function Header() {
         </div>
       </header>
       <nav id="mnav" className={`mnav ${open ? 'open' : ''}`} aria-label="Mobile">
-        {NAV.map(([label, to]) =>
+        {NAV.map(([label, to], i) =>
           to.includes('#') ? (
-            <Link key={label} to={to} className="l">{label}</Link>
+            <Link key={label} to={to} className="l" style={{ '--i': i }}>{label}</Link>
           ) : (
-            <NavLink key={label} to={to} className={({ isActive }) => `l ${isActive ? 'active' : ''}`}>{label}</NavLink>
+            <NavLink key={label} to={to} style={{ '--i': i }} className={({ isActive }) => `l ${isActive ? 'active' : ''}`}>{label}</NavLink>
           )
         )}
         <div className="btns">
